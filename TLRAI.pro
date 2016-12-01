@@ -13,8 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    convnets.cpp \
+    imagereader.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    convnets.h \
+    imagereader.h
 
 FORMS    += mainwindow.ui
