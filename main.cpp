@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include "convnets.h"
+#include "detect.h"
 #include <opencv/cv.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -29,10 +30,34 @@ int main(int argc, char *argv[])
     probabilityMat.push_back(probMat1);
     probabilityMat.push_back(probMat2);
 
-    std::cout << "Probability Mat get." << std::endl;
+    //std::cout << "Probability Mat get." << std::endl;
     //Get one single image:
     std::string imgPath = "../TLRAI/left_img/1.png";
     cv::Mat img = cv::imread(imgPath);
+    std::string depthPath = "../TLRAI/depth/1.png";
+    cv::Mat depth = cv::imread(depthPath);
+    for(int i = 0; i < 1280; i++){
+        for(int j = 0; j < 720; j++){
+            std::cout << depth.at(i,j) << std::endl;
+        }
+    }
+    cv::Mat rgbd;
+    std::vector<cv::Mat> splitBGR, splitDepth;
+    depth.convertTo(depth, CV_8UC1);
+    cv::split(img, splitBGR);
+    cv::split(depth, splitDepth);
+    splitBGR.push_back(splitDepth[0]);
+    cv::merge(splitBGR, rgbd);
+
+
+
+    //traverse
+
+
+
+
+
+
     cv::namedWindow("image");
     cv::imshow("image", img);
     cv::waitKey(10);
