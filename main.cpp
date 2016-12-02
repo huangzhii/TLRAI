@@ -34,26 +34,26 @@ int main(int argc, char *argv[])
     //Get one single image:
     std::string imgPath = "../TLRAI/left_img/1.png";
     cv::Mat img = cv::imread(imgPath);
-    std::string depthPath = "../TLRAI/depth/1.png";
+    std::string depthPath = "../TLRAI/depth256/1.png";
     cv::Mat depth = cv::imread(depthPath);
-    for(int i = 0; i < 1280; i++){
-        for(int j = 0; j < 720; j++){
-            std::cout << depth.at(i,j) << std::endl;
-        }
-    }
+    depth.convertTo(depth, CV_8UC1);
     cv::Mat rgbd;
     std::vector<cv::Mat> splitBGR, splitDepth;
-    depth.convertTo(depth, CV_8UC1);
     cv::split(img, splitBGR);
     cv::split(depth, splitDepth);
     splitBGR.push_back(splitDepth[0]);
     cv::merge(splitBGR, rgbd);
-
-
+/*
+    for(int i = 0; i < 1280; i++){
+        for(int j = 0; j < 720; j++){
+            std::cout << rgbd.at<cv::Vec4b>(i,j) << std::endl;
+        }
+    }
+*/
 
     //traverse
-
-
+    std::cout << "====" << std::endl;
+    traverse(rgbd, 200, 200, 100, 100, conv1, conv2, probabilityMat ); // rgbd, block width, block height, width overlapping, height overlapping
 
 
 
