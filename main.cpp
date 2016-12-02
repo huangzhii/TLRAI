@@ -1,5 +1,12 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include "convnets.h"
+#include <opencv/cv.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <fstream>
+#include <iostream>
+#include <stdio.h>      /* printf */
 
 int main(int argc, char *argv[])
 {
@@ -22,8 +29,13 @@ int main(int argc, char *argv[])
     probabilityMat.push_back(probMat1);
     probabilityMat.push_back(probMat2);
 
+    std::cout << "Probability Mat get." << std::endl;
     //Get one single image:
-
+    std::string imgPath = "../TLRAI/left_img/1.png";
+    cv::Mat img = cv::imread(imgPath);
+    cv::namedWindow("image");
+    cv::imshow("image", img);
+    cv::waitKey(10);
 
     return a.exec();
 }
