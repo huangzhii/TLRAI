@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     cv::read(kptFileNode, probMat1);
     fs.release();
     cv::FileStorage fs2("../TLRConvNet/probMat2.yml", cv::FileStorage::READ);
-    cv::FileNode kptFileNode2 = fs2["probMat1"];
+    cv::FileNode kptFileNode2 = fs2["probMat2"];
     cv::read(kptFileNode2, probMat2);
     fs2.release();
     probabilityMat.push_back(probMat1);
@@ -32,9 +32,12 @@ int main(int argc, char *argv[])
 
     //std::cout << "Probability Mat get." << std::endl;
     //Get one single image:
-    std::string imgPath = "../TLRAI/left_img/1.png";
+
+    int index = 5;
+
+    std::string imgPath = "../TLRAI/left_img/" + std::to_string( index ) + ".png";
     cv::Mat img = cv::imread(imgPath);
-    std::string depthPath = "../TLRAI/depth256/1.png";
+    std::string depthPath = "../TLRAI/depth256/" + std::to_string( index ) + ".png";
     cv::Mat depth = cv::imread(depthPath);
     depth.convertTo(depth, CV_8UC1);
     cv::Mat rgbd;
@@ -52,15 +55,14 @@ int main(int argc, char *argv[])
 */
 
     //traverse
-    std::cout << "====" << std::endl;
-    traverse(rgbd, 200, 200, 100, 100, conv1, conv2, probabilityMat ); // rgbd, block width, block height, width overlapping, height overlapping
+    traverse(img, rgbd, 200, 200, 100, 100, conv1, conv2, probabilityMat ); // rgbd, block width, block height, width overlapping, height overlapping
 
 
 
-
+/*
     cv::namedWindow("image");
     cv::imshow("image", img);
     cv::waitKey(10);
-
+*/
     return a.exec();
 }

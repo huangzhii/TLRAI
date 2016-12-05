@@ -116,8 +116,10 @@ cv::Mat convolution(cv::Mat rgbd, std::vector<cv::Mat> kernel, int filterCount, 
                     for(int v = 0; v < kernel.at(i).cols; v++){
                             for (int l = 0; l < rgbdlist.size(); l++){
                                 double kernelVal = singleKernelList.at(l).at<double>(u,v);
+                                //rgbdVal = rgbdlist.at(l).at<int>(x+u, y+v);
                                 if(epoch==1) rgbdVal = rgbd.at<cv::Vec4b>(x+u, y+v)[l];
-                                if(epoch==2) rgbdVal = rgbdlist[l].at<cv::Vec4b>(x+u, y+v)[0];
+                                if(epoch==2) rgbdVal = rgbdlist[l].at<double>(x+u, y+v);
+                                //if(epoch==2) rgbdVal = rgbdlist[l].at<cv::Vec4b>(x+u, y+v)[0];
                                 //std::cout << kernelVal << " " << rgbdVal << std::endl;
                                 tempval = tempval + kernelVal * rgbdVal;
                             }
@@ -189,15 +191,20 @@ cv::Mat reshape(QVector<cv::Mat> res){
     cv::Mat output(51, 576, CV_64F, cv::Scalar(0));
     cv::Mat currRes;
     std::vector<cv::Mat> splitLayer;
+    std::cout << "*****************  Starting Reshape  *****************" << std::endl;
+    std::cout << "size of the result list: " << res.length() << std::endl;
+
     for(int i = 0; i < res.length(); i++){
         currRes = res.at(i);
 
 
+        //std::cout << "current result mat layer: " << currRes.channels() << std::endl;
+
         cv::split(currRes, splitLayer);
-        for(int j = 0; j < splitLayer.size(); j++){
+        for(int j = 0; j < splitLayer.size(); j++){ // 16 layers
             for(int x = 0; x < 6; x++){
                 for(int y = 0; y < 6; y++){
-                    output.at<double>(i, j*36 + x*5 + y) = currRes.at<double>(x,y);
+                    output.at<double>(i, j*36 + x*6 + y) = splitLayer.at(j).at<double>(x,y);
                 }
             }
         }
